@@ -27,7 +27,7 @@ class Tag(LogObj):
 
         # Now, set our idxs.
         self.start_idx = start_idx
-        self.end_idx = end_idx
+        self.end_idx = end_idx + 1 # Increment by 1 to grab the '>' in the highlight.
 
         # Determine what the name of our tag is from the tag_str.
         self.name = tag_str[1:]
