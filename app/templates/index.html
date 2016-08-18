@@ -1,0 +1,39 @@
+<html>
+<head>
+    <!-- import jquery -->
+    <script src="static/js/jquery-3.1.0.min.js"></script>
+
+    <!-- import the style-sheet and css needed for the 'jquery.highlight' plug-in -->
+    <link  href="static/plugin/jquery.highlight/jquery.highlight-within-textarea.css" rel="stylesheet">
+    <script src="static/plugin/jquery.highlight/jquery.highlight-within-textarea.js"></script>
+</head>
+
+<body>
+
+    <p><b>Source for {{ html_url }}</b></p>
+
+    <ul>
+        {% for tag in tag_tallies %}
+        <li>{{tag.name}} = {{tag.count}}</li>
+        <ul>
+            {% for highlight in tag.highlights %}
+            <li>s{{highlight}}</li>
+            {% endfor %}
+        </ul>
+        {% endfor %}
+    </ul>
+
+    <div class="container">
+    <textarea class="html-source-viewer" style="width:600px;height:600px;resize:none;">{{ html_doc }}</textarea>
+    </div>
+
+    <!-- use our jquery.highlight plugin to highlight the text that we want to highlight in our textarea -->
+    <script>
+        function onInput(input) {
+            return {{ tag_idxs }};
+        }
+        $('textarea.html-source-viewer').highlightWithinTextarea(onInput);
+    </script>
+
+</body>
+</html>
