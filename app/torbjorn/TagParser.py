@@ -115,9 +115,12 @@ class TagParser(LogObj):
         in_tag = False
         tag_str = ""
         tag_idx = 0
+
+        print html_doc
+
         for idx,char in enumerate(html_doc):
 
-            # Triggered when we the last char we ran into was a '<'.
+            # Triggered when the last char we ran into was a '<'.
             if may_have_tag:
                 # If this char is an alpha, then we've got a tag!
                 if char.isalpha():
