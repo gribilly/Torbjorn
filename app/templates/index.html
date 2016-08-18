@@ -10,30 +10,31 @@
 
 <body>
 
-    <p><b>Source for {{ html_url }}</b></p>
-
+    <!-- Display a list of our tags and how many each of them occurs -->
+    {% if tag_tallies %}
     <ul>
         {% for tag in tag_tallies %}
-        <li>{{tag.name}} = {{tag.count}}</li>
-        <ul>
-            {% for highlight in tag.highlights %}
-            <li>s{{highlight}}</li>
-            {% endfor %}
-        </ul>
+        <!-- use our jquery.highlight plugin to highlight the text that we want to highlight in our textarea -->
+        <li><a href="javascript:function onInput(input) {return {{ tag.highlights }};}$('textarea.html-source-viewer').highlightWithinTextarea(onInput);">{{tag.name}}</a> = {{tag.count}}</li>
         {% endfor %}
     </ul>
+    {% else %}
+    <p>No tags found!</p>
+    {% endif %}
 
     <div class="container">
     <textarea class="html-source-viewer" style="width:600px;height:600px;resize:none;">{{ html_doc }}</textarea>
     </div>
 
-    <!-- use our jquery.highlight plugin to highlight the text that we want to highlight in our textarea -->
+    <!-- TODO: Remove this.  If we're having the highlight javascript kick-off on press, then we need to remove this.  Right now keeping it because of weird formatting issue this prevents. -->
     <script>
-        function onInput(input) {
-            return {{ tag_idxs }};
-        }
-        $('textarea.html-source-viewer').highlightWithinTextarea(onInput);
+       function onInput(input) {
+           return [];
+       }$('textarea.html-source-viewer').highlightWithinTextarea(onInput);
     </script>
+
+
+
 
 </body>
 </html>
