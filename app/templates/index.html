@@ -1,40 +1,64 @@
 <html>
 <head>
-    <!-- import jquery -->
-    <script src="static/js/jquery-3.1.0.min.js"></script>
+    <!-- Some meta defintions -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width = device-width, initial-scape = 1">
 
-    <!-- import the style-sheet and css needed for the 'jquery.highlight' plug-in -->
-    <link  href="static/plugin/jquery.highlight/jquery.highlight-within-textarea.css" rel="stylesheet">
-    <script src="static/plugin/jquery.highlight/jquery.highlight-within-textarea.js"></script>
+    <!-- Import jquery.highlight-->
+    <link rel="stylesheet" href="static/plugin/jquery.highlight/jquery.highlight-within-textarea.css" rel="stylesheet">
+
+    <!-- Import bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- Import our stylesheet -->
+    <link rel="stylesheet" href="static/style/index.css">
+
 </head>
 
 <body>
 
-    <!-- Display a list of our tags and how many each of them occurs -->
-    {% if tag_tallies %}
-    <ul>
-        {% for tag in tag_tallies %}
-        <!-- use our jquery.highlight plugin to highlight the text that we want to highlight in our textarea -->
-        <li><a href="javascript:function onInput(input) {return {{ tag.highlights }};}$('textarea.html-source-viewer').highlightWithinTextarea(onInput);">{{tag.name}}</a> = {{tag.count}}</li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p>No tags found!</p>
-    {% endif %}
+<div class="container-fluid">
 
-    <div class="container">
-    <textarea class="html-source-viewer" style="width:600px;height:600px;resize:none;">{{ html_doc }}</textarea>
+    <div class="row">
+        <div class="col-sm-3 sidebar">
+
+            <div class="well">
+                <!-- If we found tags, then display a list of our tags and the tally for each of them. -->
+                {% if tag_tallies %}
+                <div class="list-group">
+                    {% for tag in tag_tallies %}
+                    <!-- use our jquery.highlight plugin to highlight the text that we want to highlight in our textarea -->
+                    <a href="javascript:function onInput(input) {return {{ tag.highlights }};}$(document.getElementById('html-doc')).highlightWithinTextarea(onInput);" class="list-group-item">
+                        <span class="badge">{{tag.count}}</span>
+                        {{tag.name}}
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <!-- Otherwise let's just show a message saying that no tags were found -->
+
+                <h1>No tags found!</h1>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-md-9 content">
+            <div class="well">
+                <textarea disabled id="html-doc">{{ html_doc }}</textarea>
+            </div>
+        </div>
     </div>
+</div>
 
-    <!-- TODO: Remove this.  If we're having the highlight javascript kick-off on press, then we need to remove this.  Right now keeping it because of weird formatting issue this prevents. -->
-    <script>
-       function onInput(input) {
-           return [];
-       }$('textarea.html-source-viewer').highlightWithinTextarea(onInput);
-    </script>
+<!-- import jquery -->
+<script src="static/js/jquery-3.1.0.min.js"></script>
 
+<!-- import jquery.highlight -->
+<script src="static/plugin/jquery.highlight/jquery.highlight-within-textarea.js"></script>
 
-
+<!-- import bootstrap -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 </body>
 </html>

@@ -1,72 +1,33 @@
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700|Roboto+Mono);
-
-body {
-    max-width: 100%;
-    margin: 40px auto;
-    font: 18px/1.4 'Open Sans', sans-serif;
-    color: #555;
-    background-color: #eee;
-}
-
-.container {
-    position: relative;
-    max-width: 100%;
-    margin: 0px auto;
-    margin-top: 50px;
-    background-color: blue;
-}
-
-a {
-    display: inline-block;
-    padding: 10px 20px;
-    border: 1px solid #fff;
-    border-radius: 10px;
-    color: #fff;
-    background-color: #777;
-    text-decoration: none;
-}
-
-section {
-    margin-top: 60px;
-}
-
-script {
-    display: block;
-    margin-top: 10px;
-    padding-left: 10px;
-    border-left: 8px solid #ccc;
-    white-space: pre-wrap;
-    font: 14px/1.4 'Roboto Mono', sans-serif;
-}
-
-/* background and positioning */
+/* background and positioning for textarea highlighting */
 .hwt-container {
+    display: block;
     background-color: #fff;
 }
 
-/* size and formatting */
+/* size and formatting for textarea highlighting */
 .hwt-content {
-    width: 500px;
-    height: 100px;
-    padding: 20px;
+    height: 100%;
+    width: 100%;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
     color: #555;
-    font: 18px/25px 'Roboto Mono', sans-serif;
 }
 
-/* highlights */
+/* highlights for our textarea highlighting */
 .hwt-content mark {
     border-radius: 3px;
-}
-.hwt-content mark:nth-of-type(2n) {
-    background-color: #cfdeab;
-}
-.hwt-content mark:nth-of-type(2n+1) {
     background-color: #b1d5e5;
 }
 
-textarea {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	width: 100%;
+/* setting up our textarea */
+textarea{
+    height: 100%;
+    width:  100%;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
 }
