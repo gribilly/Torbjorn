@@ -13,14 +13,14 @@ def main():
     parser = TagParser('file:///Users/billy.grissom/Code/slackTest/tests/large.html')
 
     # Get our list of tag names.
-    tag_tallies  = list()
+    html_tags  = list()
     for tag_name in parser.tag_names:
         tag_count = parser.get_tag_count(tag_name)
         tag_highlights = sorted(parser.get_tag_idxs(tag_name))  # It looks like the highlight plugin needs to have the indices sorted, otherwise weird highlighting will ensue.
-        tag_tallies.append(dict(name=tag_name,count=tag_count,highlights=tag_highlights))
+        html_tags.append(dict(name=tag_name,count=tag_count,highlights=tag_highlights))
 
     # Render the page and pass our variable.
-    return render_template('index.html', html_url=parser.url, html_doc=parser.html, tag_tallies=tag_tallies,url_str=parser.url)
+    return render_template('index.html', html_url=parser.url, html_doc=parser.html, html_tags=html_tags,url_str=parser.url)
 
 # Run our app when this file is called.
 if __name__ == "__main__":

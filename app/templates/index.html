@@ -51,12 +51,12 @@
     <div class="row">
         <div class="col-sm-3 sidebar">
             <div class="well">
-                <div style="text-align:center;font-weight:bold;margin-bottom:20px;">Found {{tag_tallies|length}} tags!</div>
+                <div style="text-align:center;font-weight:bold;margin-bottom:20px;">Found {{html_tags|length}} tags!</div>
                 <!-- If we found tags, then display a list of our tags and the tally for each of them. -->
-                {% if tag_tallies %}
+                {% if html_tags %}
                 <div class="scrollable-menu">
                 <div class="list-group">
-                    {% for tag in tag_tallies %}
+                    {% for tag in html_tags %}
                     <!-- use our jquery.highlight plugin to highlight the text that we want to highlight in our textarea -->
                     <a href="javascript:function onInput(input) {return {{ tag.highlights }};}$(document.getElementById('html-doc')).highlightWithinTextarea(onInput);" class="list-group-item">
                         <span class="badge">{{tag.count}}</span>
