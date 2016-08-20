@@ -10,7 +10,7 @@ app = Flask(__name__)
 @app.route("/")
 def main():
     # Use our parser to get the Tags out of an html doc.
-    parser = TagParser('file:///Users/billy.grissom/Code/slackTest/tests/test.html')
+    parser = TagParser('file:///Users/billy.grissom/Code/slackTest/tests/large.html')
 
     # Get our list of tag names.
     tag_tallies  = list()
@@ -20,7 +20,7 @@ def main():
         tag_tallies.append(dict(name=tag_name,count=tag_count,highlights=tag_highlights))
 
     # Render the page and pass our variable.
-    return render_template('index.html', html_url=parser.url, html_doc=parser.html, tag_tallies=tag_tallies)
+    return render_template('index.html', html_url=parser.url, html_doc=parser.html, tag_tallies=tag_tallies,url_str=parser.url)
 
 # Run our app when this file is called.
 if __name__ == "__main__":
