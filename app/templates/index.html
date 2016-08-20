@@ -18,14 +18,43 @@
 
 <body>
 
-<div class="container-fluid">
+<div class="container">
+
+    <div class="row">
+        <div class="jumbotron">
+            <h1>Torbjörn<BR></h1>
+            <p><small><i>"Build 'em up, Break 'em down!"</i></small></p>
+            <p>This app displays the source code for a URL and lists the tags found within that code.</p>
+            <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-12 sidebar">
+            <label for="html-url">URL to view source for:</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="html-url">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">Break it down!</button>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row top-buffer" >
+        <div class="col-sm-12 sidebar">
+            <div class="alert alert-info" role="alert">Currently viewing source code for: <a href="{{url_str}}" target="_blank">{{url_str}}</a></div>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-sm-3 sidebar">
-
             <div class="well">
+                <div style="text-align:center;font-weight:bold;margin-bottom:20px;">Found {{tag_tallies|length}} tags!</div>
                 <!-- If we found tags, then display a list of our tags and the tally for each of them. -->
                 {% if tag_tallies %}
+                <div class="scrollable-menu">
                 <div class="list-group">
                     {% for tag in tag_tallies %}
                     <!-- use our jquery.highlight plugin to highlight the text that we want to highlight in our textarea -->
@@ -35,6 +64,7 @@
                     </a>
                     {% endfor %}
                 </div>
+                </div>
                 {% else %}
                 <!-- Otherwise let's just show a message saying that no tags were found -->
 
@@ -43,8 +73,9 @@
             </div>
         </div>
 
-        <div class="col-md-9 content">
-            <div class="well">
+        <div class="col-sm-9 content">
+            <!-- Display our source code! -->
+            <div class="well well-lg">
                 <textarea disabled id="html-doc">{{ html_doc }}</textarea>
             </div>
         </div>
