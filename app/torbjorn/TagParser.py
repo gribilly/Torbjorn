@@ -116,8 +116,6 @@ class TagParser(LogObj):
         tag_str = ""
         tag_idx = 0
 
-        print html_doc
-
         for idx,char in enumerate(html_doc):
 
             # Triggered when the last char we ran into was a '<'.
