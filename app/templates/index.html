@@ -27,24 +27,13 @@
             <p>
             <form method="post" name="url_submit" class="submit-once" onsubmit="$('#btn-url').prop('disabled',true);">
             <div class="input-group input-group-lg">
-                <input type="text" class="form-control" name="user_url" placeholder="Enter a url..">
+                <input type="text" class="form-control" name="user_url" placeholder="Enter a url..." value="{{ url_str }}">
                 <span class="input-group-btn"><button class="btn btn-default" id="btn-url" type="submit">View tags!</button></span>
             </div>
             </form>
             </p>
         </div>
     </div>
-
-    <!-- If a url was provided, then show our header -->
-    {% if url_str %}
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="page-header">
-                <h3 class="content-header-overflow">Viewing tags for <a href="{{ url_str }}">{{ url_str }}</a></h3>
-            </div>
-        </div>
-    </div>
-    {% endif %}
 
     <!-- Display an alert if need be. -->
     {% if alert_str %}
