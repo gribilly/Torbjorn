@@ -160,8 +160,8 @@ class TagParser(LogObj):
         self.__tags[tag.name].append(tag)
 
 if __name__ == "__main__":
-    import logging
+    import logging,sys
     logging.basicConfig(level=logging.DEBUG)
-    thing = TagParser('file:///Users/billy.grissom/Code/slackTest/tests/test.html')
+    thing = TagParser(sys.argv[1])
 
 
