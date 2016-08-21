@@ -6,6 +6,7 @@
 
 /* size and formatting for textarea highlighting */
 .hwt-content {
+    resize: none;
     height: 600px;
     width: 100%;
     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
@@ -31,6 +32,7 @@
 
 /* setting up our textarea */
 textarea{
+    resize: none;
     height: 600px;
     width:  100%;
     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
