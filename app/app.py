@@ -1,16 +1,19 @@
-from flask import Flask, render_template, request, redirect, url_for
-from urllib import FancyURLopener
-import re
-
+from flask import Flask, render_template, request
 from torbjorn import TagParser
 
 app = Flask(__name__)
 
 # Our main route.
-@app.route("/")
+@app.route("/",methods=['GET','POST'])
 def main():
-    # Use our parser to get the Tags out of an html doc.
-    parser = TagParser('file:///Users/billy.grissom/Code/slackTest/tests/large.html')
+
+    # By default our url string is nothing.
+    url_str = 'file:///Users/billy.grissom/Code/slackTest/tests/large.html'
+    if request.method == 'POST':
+        url_str = request.form['user_url']
+
+    # Parse our URL.
+    parser = TagParser(url_str)
 
     # Get our list of tag names.
     html_tags  = list()
