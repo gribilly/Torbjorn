@@ -25,10 +25,10 @@
             <p><small><i>"Build 'em up, Break 'em down!"</i></small></p>
             <p>This app displays a summary of the HTML tags found at a given url.</p>
             <p>
-            <form method="post" name="url_submit">
+            <form method="post" name="url_submit" class="submit-once" onsubmit="$('#btn-url').prop('disabled',true);">
             <div class="input-group input-group-lg">
-                <input type="text" class="form-control" name="user_url" placeholder="{{ url_input_str }}">
-                <span class="input-group-btn"><button class="btn btn-default" type="submit">View tags!</button></span>
+                <input type="text" class="form-control" name="user_url" placeholder="Enter a url..">
+                <span class="input-group-btn"><button class="btn btn-default" id="btn-url" type="submit">View tags!</button></span>
             </div>
             </form>
             </p>
