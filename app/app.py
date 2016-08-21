@@ -59,6 +59,15 @@ def main_post():
     url_str = request.form['user_url']
     return redirect(url_for('main',url=url_str))
 
+@app.route('/readme/')
+@app.route('/tests/test')
+def test_small():
+    return render_template('tests/test.html')
+
+@app.route('/tests/no_tags')
+def test_no_tags():
+    return render_template('tests/no_tags.html')
+
 # Run our app when this file is called.
 if __name__ == "__main__":
     # TODO: Switch this from debug mode before releasing!  This allows us to refresh the page without resetting Flask each time.
