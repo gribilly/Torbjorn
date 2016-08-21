@@ -35,16 +35,20 @@
         </div>
     </div>
 
-    <!-- Display our text input for the user to be able to enter a URL. -->
+    <!-- If a url was provided, then show our header -->
+    {% if url_str %}
     <div class="row">
-        <div class="col-sm-12" id="url-input">
-
+        <div class="col-sm-12">
+            <div class="page-header">
+                <h3 class="content-header-overflow">Viewing tags for <a href="{{ url_str }}">{{ url_str }}</a></h3>
+            </div>
         </div>
     </div>
+    {% endif %}
 
     <!-- Display an alert if need be. -->
     {% if alert_str %}
-    <div class="row top-buffer" >
+    <div class="row" >
         <div class="col-sm-12">
             <div class="alert {{ alert_style }}" role="alert">
                 <div style="text-align:center;font-weight:bold;">{{ alert_str }}</div>

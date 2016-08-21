@@ -40,3 +40,10 @@ textarea{
     padding: 0;
     border-radius: 0;
 }
+
+/* for showing the url that we're viewing the source for currently. */
+.content-header-overflow {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
