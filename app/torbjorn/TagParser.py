@@ -19,7 +19,7 @@ class TagParser(LogObj):
         self.__html = ""
         """:type: str"""
 
-        # Public. Our dictionary that contains all of our tags.  We map a tag name to a list of Tag objects.
+        # Private. Our dictionary that contains all of our tags.  We map a tag name to a list of Tag objects.
         self.__tags = dict()
         """:type: dict[str,list[Tag]]"""
 
