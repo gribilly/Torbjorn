@@ -27,7 +27,7 @@
             <p>
             <form method="post" name="url_submit" class="submit-once" onsubmit="$('#btn-url').prop('disabled',true);">
             <div class="input-group input-group-lg">
-                <input type="text" class="form-control" name="user_url" placeholder="Enter a url..." value="{{ url_str }}">
+                <input type="text" class="form-control" name="user_url" id="usr-url" placeholder="Enter a url..."">
                 <span class="input-group-btn"><button class="btn btn-default" id="btn-url" type="submit">View tags!</button></span>
             </div>
             </form>
@@ -89,5 +89,12 @@
 <!-- import bootstrap -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+<!-- import get url param -->
+<script src="static/js/get-url-param.js"></script>
+
+<!-- Simple script to pre-populate the textfield with the url param -->
+<script>
+$( "#usr-url" ).val(getUrlParameter('url'));
+</script>
 </body>
 </html>
