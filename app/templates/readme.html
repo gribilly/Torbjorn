@@ -1,0 +1,118 @@
+<html>
+<head>
+    <!-- Some meta defintions -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width = device-width, initial-scape = 1">
+
+    <!-- Import bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <title>Torbjörn - About</title>
+</head>
+
+<body>
+<div class="container">
+
+    <div class="page-header"><h1>About <a href="/">Torbjörn</a></h1></div>
+    <p>This web-app is my solution to a Slack coding exercise for a Tools Engineering role.  The goal of the challenge was to design a web-app that could do the following:</p>
+    <ul>
+        <li>Create a simple web app, hosted at a URL we can visit</li>
+        <li>Users can enter a URL of a page to fetch</li>
+        <li>The web app fetches the HTML of the page and displays the source to the user</li>
+        <li>A summary of the document is displayed, listing which tags are present in the HTML and how many of each tag</li>
+        <li>Clicking on the name of each tag in the summary will highlight the tags in the source code view</li>
+    </ul>
+    <BR>
+    <h4>Why call it Torbjörn?</h4>
+    <p>If you're going to build a web-app, why not do it with a <a href="http://www.imdb.com/title/tt0088763/quotes?item=qt0416285">sense of style</a>?  Torbjörn is the name of a character from the game <a href="https://playoverwatch.com/en-us/heroes/torbjorn/">Overwatch</a>.  He's an engineer who's catch-phrase is <i>"Build 'em up, Break 'em down!"</i>.  Since this project is all about writing code to break-down a web-page into a list of elements, I thought the name was fitting.</p>
+
+    <div class="page-header"><h2>Dependencies</h2></div>
+        <p>This app is written in Python and relies on the following technologies to function:</p>
+        <div class="list-group">
+            <a href="http://flask.pocoo.org/" class="list-group-item">
+                <h4 class="list-group-item-heading">Flask</h4>
+                <p class="list-group-item-text">Python web-app framework.</p>
+            </a>
+            <a href="https://www.crummy.com/software/BeautifulSoup/" class="list-group-item">
+                <h4 class="list-group-item-heading">Beautiful Soup</h4>
+                <p class="list-group-item-text">Used to ensure the HTML is formatted pretty and resolve any encoding woes.</p>
+            </a>
+            <a href="https://github.com/lonekorean/highlight-within-textarea" class="list-group-item">
+                <h4 class="list-group-item-heading">JQuery Highlight Plugin</h4>
+                <p class="list-group-item-text">Used to highlight the text.</p>
+            </a>
+            <a href="http://getbootstrap.com/" class="list-group-item">
+                <h4 class="list-group-item-heading">Bootstrap</h4>
+                <p class="list-group-item-text">Used for styling the app and allowing it to be a responsive design.</p>
+            </a>
+            <a href="https://heroku.com/" class="list-group-item">
+                <h4 class="list-group-item-heading">Heroku</h4>
+                <p class="list-group-item-text">Used to deploy and host the app live on the web.</p>
+            </a>
+        </div>
+
+    <div class="page-header"><h2>How it Works</h2></div>
+    <p>
+        The bulk of our logic starts in the <b>torbjorn</b> Python package.  Within this, are two classes: <b>TagParser</b> and <b>Tag</b>.  When our web-app receives a url from the user, we pass it to the TagParser object.  The TagParser object will open the url via Python's urllib and pass it to <b>BeautifulSoup</b>.
+    </p>
+
+    <div class="alert alert-danger"><p>BeautifulSoup is a python library designed to parse tags out of an html document and provide functionality to interact with said tags.</p><p>My code
+        <b><i>does not</i></b> utilize it for its tag parsing abilities.</p><p>This is because BeautifulSoup is designed with the intent of extracting information from tags, not keeping track of where they are in the source code (which is
+        critical to my solution).</p><p>Although it would be possible to implement a solution with their tags, it is far more efficient for me to just extract the tags from the string myself rather than
+        hack around BeautifulSoup.</p></div>
+    <p>
+        The reason I use BeautifulSoup is because it has a very handy function called <b>prettify()</b>.  This function will format the HTML string so that the code is nested nicely (this function will also handle common encoding errors).  Since our source file could potential be formatted very oddly, I thought it'd be nice to take advantage of this tool to format the code so that it's more readable.  That being said, BeautifulSoup is not necessary to achieve the original goals of this exercise.
+    </p>
+
+    <BR>
+    <h4>Parsing the Tags</h4>
+    <p>
+        Once BeautifulSoup has formatted our HTML code into a pretty string (<i>html_str</i>), our TagParser object then calls its <b>parse()</b> function on it.  The parse() function will iterate through our HTML code (character by character) looking for tag strings (<i>tag_str</i>).  This is determined by the <i>'<'</i> and <i>'>'</i> characters that begin and end a tag.
+    </p>
+
+    <div class="alert alert-warning"><b>Note:</b> I could've used a reg-ex to find the tags in the string, but creating a loop means we only iterate once and is much easier to read/maintain.</div>
+
+    <p>
+        Each time the TagParser thinks that it has finished encountering a <i>tag_str</i>, it creates a <b>Tag</b> object and passes the <i>tag_str</i> to it.  The Tag object then extracts the name of the tag out of the tag_str and marks the start and end index of the <i>tag_str</i> in relation to the <i>html_str</i>.
+    </p>
+
+    <p>
+        After having created a Tag object, our TagParser will add the object to its tags dictionary.  This dictionary maps a tag name to a list of Tag objects that correspond to that name.  Our
+        TagParser will repeat this process until its reaches the end of the html document.
+    </p>
+
+    <BR>
+    <h4>Highlighting the Tags</h4>
+    <p>
+        The highlighting in our rendered template is done via a JQuery textarea-highlight plugin.  This plugin supports either highlighting all occurrences of a string in a textarea, or
+        highlighting a set of indices.  Since our TagParser kept track of the start and end indices of a tag, we simply pass each tag's list of indices to the html template.  That being said, that
+        doesn't solve the issue of how we highlight a specific subset when a tag is pressed.  To solve that, each tag is rendered in the document as a link that executes a javascript call that
+        highlights that tag's list of indices:
+    </p>
+    <div class=""well><pre><code>function onInput(input) {return tag_idxs;}<BR>$(document.getElementById('html-doc')).highlightWithinTextarea(onInput);"</code></pre></div>
+
+<div class="page-header"><h2>Some Other Features</h2></div>
+    <p>
+        Below are some simple features I added that weren't part of the original spec but I thought were good to add:
+    </p>
+
+    <div class="list-group">
+            <a href="/?url=itshighnoon" class="list-group-item">
+                <h4 class="list-group-item-heading">Handling Invalid URLs</h4>
+                <p class="list-group-item-text">If the url provided is invalid, then we don't show the source code viewer and the list, and instead show only an error message.</p>
+            </a>
+            <a href="/?url=https%3A%2F%2Ftorbjorn.herokuapp.com%2Ftests%2Fno_tags" class="list-group-item">
+                <h4 class="list-group-item-heading">Handling No Tags</h4>
+                <p class="list-group-item-text">If the url provided has no tags, then we don't show the tag list.</p>
+            </a>
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">One Submission at a Time</h4>
+                <p class="list-group-item-text">Can't spam the button to submit a url to parse  Once tapped, we'll wait till it is parsed.</p>
+            </div>
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Responsive Design</h4>
+                <p class="list-group-item-text">Used bootstrap for the styling, so the app should be fully responsive to changes in the window size.  Give it a try!</p>
+            </div>
+    </div>
+</div>

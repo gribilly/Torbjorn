@@ -60,6 +60,9 @@ def main_post():
     return redirect(url_for('main',url=url_str))
 
 @app.route('/readme/')
+def readme():
+    return render_template('readme.html')
+
 @app.route('/tests/test')
 def test_small():
     return render_template('tests/test.html')
