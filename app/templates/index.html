@@ -13,73 +13,78 @@
 
     <!-- Import our stylesheet -->
     <link rel="stylesheet" href="static/style/index.css">
-
 </head>
 
 <body>
-
 <div class="container">
 
+    <!-- Display our fancy title banner. -->
     <div class="row">
         <div class="jumbotron">
             <h1>Torbjörn<BR></h1>
             <p><small><i>"Build 'em up, Break 'em down!"</i></small></p>
-            <p>This app displays the source code for a URL and lists the tags found within that code.</p>
-            <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
-        </div>
-    </div>
-
-
-    <div class="row">
-        <div class="col-sm-12 sidebar">
-            <label>URL to view source for:</label>
-            <form method="post">
-            <div class="input-group">
-                <input type="text" class="form-control" name="user_url">
-                <span class="input-group-btn"><button class="btn btn-default" type="submit">Break it down!</button></span>
+            <p>This app displays a summary of the HTML tags found at a given url.</p>
+            <p>
+            <form method="post" name="url_submit">
+            <div class="input-group input-group-lg">
+                <input type="text" class="form-control" name="user_url" placeholder="{{ url_input_str }}">
+                <span class="input-group-btn"><button class="btn btn-default" type="submit">View tags!</button></span>
             </div>
             </form>
+            </p>
         </div>
     </div>
 
-    <div class="row top-buffer" >
-        <div class="col-sm-12 sidebar">
-            <div class="alert alert-info" role="alert">Currently viewing source code for: <a href="{{url_str}}" target="_blank">{{url_str}}</a></div>
-        </div>
-    </div>
-
+    <!-- Display our text input for the user to be able to enter a URL. -->
     <div class="row">
-        <div class="col-sm-3 sidebar">
-            <div class="well">
-                <div style="text-align:center;font-weight:bold;margin-bottom:20px;">Found {{html_tags|length}} tags!</div>
-                <!-- If we found tags, then display a list of our tags and the tally for each of them. -->
-                {% if html_tags %}
-                <div class="scrollable-menu">
-                <div class="list-group">
-                    {% for tag in html_tags %}
-                    <!-- use our jquery.highlight plugin to highlight the text that we want to highlight in our textarea -->
-                    <a href="javascript:function onInput(input) {return {{ tag.highlights }};}$(document.getElementById('html-doc')).highlightWithinTextarea(onInput);" class="list-group-item">
-                        <span class="badge">{{tag.count}}</span>
-                        {{tag.name}}
-                    </a>
-                    {% endfor %}
-                </div>
-                </div>
-                {% else %}
-                <!-- Otherwise let's just show a message saying that no tags were found -->
+        <div class="col-sm-12" id="url-input">
 
-                <h1>No tags found!</h1>
-                {% endif %}
+        </div>
+    </div>
+
+    <!-- Display an alert if need be. -->
+    {% if alert_str %}
+    <div class="row top-buffer" >
+        <div class="col-sm-12">
+            <div class="alert {{ alert_style }}" role="alert">
+                <div style="text-align:center;font-weight:bold;">{{ alert_str }}</div>
             </div>
         </div>
+    </div>
+    {% endif %}
 
-        <div class="col-sm-9 content">
+    <!-- Display our parsed content, if we got it. -->
+    {% if html_doc %}
+    <div class="row top-buffer">
+        <!-- If we found tags, then display a list of our tags and the tally for each of them. -->
+        {% if html_tags %}
+        <div class="col-sm-3 sidebar">
+            <div class="well well-lg">
+                <div class="scrollable-menu">
+                    <div class="list-group">
+                        {% for tag in html_tags %}
+                        <!-- use our jquery.highlight plugin to highlight the text that we want to highlight in our textarea -->
+                        <a href="javascript:function onInput(input) {return {{ tag.highlights }};}$(document.getElementById('html-doc')).highlightWithinTextarea(onInput);" class="list-group-item">
+                            <span class="badge">{{tag.count}}</span>
+                            {{tag.name}}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-9 content">  <!-- If tags are shown, then source code is displayed on the right -->
+        <!-- Otherwise let's just show the source code and nothing else -->
+        {% else %}
+        <div class="col-sm-12 content"> <!-- If we have no tags, then display all of the sourcecode -->
+        {% endif %}
             <!-- Display our source code! -->
             <div class="well well-lg">
                 <textarea disabled id="html-doc">{{ html_doc }}</textarea>
             </div>
         </div>
     </div>
+    {% endif %}
 </div>
 
 <!-- import jquery -->
