@@ -1,10 +1,10 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from torbjorn import TagParser
 
 app = Flask(__name__)
 
 # Our main route.
-@app.route("/",methods=['GET','POST'])
+@app.route("/",methods=['GET'])
 def main():
 
     # Define the varaibles we need.
@@ -13,13 +13,13 @@ def main():
     html_doc    = ""        # The actual string that represents the doc.
     html_tags   = list()    # List of tags that our parser found in the document.
 
+    url_str = request.args.get('url',"")
+
     # If this is a post, then grab the URL string that the user posted.
-    if request.method == 'POST':
-        url_str = request.form['user_url']
-        try:
-            parser = TagParser(url_str)
-        except IOError:
-            parser = None
+    try:
+        parser = TagParser(url_str)
+    except IOError:
+        parser = None
 
     # If we were able to parse, then let's grab our list of tags that were parsed and pass them to our html template.
     if parser:
@@ -53,6 +53,11 @@ def main():
 
     # Render the page and pass our variable.
     return render_template('index.html', html_doc=html_doc, html_tags=html_tags, url_str=url_str, url_input_str=url_input_str, alert_str=alert_str, alert_style=alert_style)
+
+@app.route('/',methods=['POST'])
+def main_post():
+    url_str = request.form['user_url']
+    return redirect(url_for('main',url=url_str))
 
 # Run our app when this file is called.
 if __name__ == "__main__":
