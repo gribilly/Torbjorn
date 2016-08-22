@@ -77,6 +77,10 @@ def test_small():
 def test_no_tags():
     return render_template('tests/no_tags.html')
 
+@app.route('/tests/one_tag')
+def test_one_tag():
+    return render_template('tests/one_tag.html')
+
 # Run our app when this file is called.
 if __name__ == "__main__":
     # TODO: Switch this from debug mode before releasing!  This allows us to refresh the page without resetting Flask each time.
