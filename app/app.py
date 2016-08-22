@@ -22,11 +22,13 @@ def main():
         parser = None
 
     # If we were able to parse, then let's grab our list of tags that were parsed and pass them to our html template.
+    total_tags = 0  # Keep trag of how many occurrences of tags were found in general.
     if parser:
         html_doc = parser.html
         for tag_name in parser.tag_names:
             tag_count = parser.get_tag_count(tag_name)
             tag_highlights = sorted(parser.get_tag_idxs(tag_name))  # It looks like the highlight plugin needs to have the indices sorted, otherwise weird highlighting will ensue.
+            total_tags += len(tag_highlights)
             html_tags.append(dict(name=tag_name,count=tag_count,highlights=tag_highlights))
 
     # Sort our list of tags based on whom is the most populated.
@@ -46,9 +48,13 @@ def main():
             alert_style = "alert-danger"
         elif len(html_tags) == 0:
             alert_str = "No tags found!"
-            alert_style = "alert-danger"
+            alert_style = "alert-warning"
+        # Grammar handling for if we have 1 tag.
+        elif len(html_tags) == 1:
+            alert_str = "Found %d unique tag!" % (len(html_tags))
+            alert_style = "alert-success"
         else:
-            alert_str = "Found %d tags!" % len(html_tags)
+            alert_str = "Found %d unique tags with %d occurrences!" %(len(html_tags),total_tags)
             alert_style = "alert-success"
 
     # Render the page and pass our variable.
