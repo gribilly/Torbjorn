@@ -1,7 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for
-from torbjorn import TagParser
-
-app = Flask(__name__)
+from torbjorn import app
+from flask import render_template, request, redirect, url_for
+from tagparser import TagParser
 
 # Our main route.
 @app.route("/",methods=['GET'])
