@@ -172,7 +172,7 @@ var UrlForm = React.createClass({
                     </p>
                     <form method="post" className="submit-once" onSubmit={this.handleSubmit}>
                         <div className="input-group input-group-lg">
-                            <input type="text" className="form-control" placeholder="Enter a url..." value={this.state.url} onChange={this.handleInputChange} />
+                            <input type="text" className="form-control" placeholder={(this.props.url) ? this.props.url : "Enter a url..." } value={this.state.url} onChange={this.handleInputChange} />
                             <span className="input-group-btn">
                                 <button disabled={disabled} className={"btn btn-default" + disabled} id="btn-url" type="submit">View tags!</button>
                             </span>
@@ -197,18 +197,40 @@ var Torbjorn= React.createClass({
         };
     },
 
+    getUrlParameter: function(sParam) {
+        var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : sParameterName[1];
+            }
+        }
+    },
+
+    componentDidMount: function() {
+        var url_param = this.getUrlParameter('url');
+        if (url_param) {
+            this.handleUrlSubmit({url: url_param})
+        }
+    },
+
     // Send our URL to our server's API for parsing.
     handleUrlSubmit: function(post_data) {
         $.ajax({
-            url: this.props.url,
+            url: this.props.api,
             dataType: 'json',
             type: 'POST',
             data: post_data,
             success: function(response) {
-                this.setState({html: response.html_str, tags: response.html_tags, alert: response.alert});
+                this.setState({html: response.html_str, tags: response.html_tags, alert: response.alert, url: post_data.url});
             }.bind(this),
             error: function(xhr, status, err) {
-                console.error(this.props.url, status, err.toString());
+                console.error(this.props.api, status, err.toString());
             }.bind(this)
         });
     },
@@ -223,7 +245,7 @@ var Torbjorn= React.createClass({
 
         return (
             <div className="container">
-                <UrlForm onUrlSubmit={this.handleUrlSubmit} />
+                <UrlForm onUrlSubmit={this.handleUrlSubmit} url={this.state.url} />
                 {alert}
                 <TagViewer tags={this.state.tags} html={this.state.html} />
             </div>
@@ -232,6 +254,6 @@ var Torbjorn= React.createClass({
 });
 
 ReactDOM.render(
-    <Torbjorn url="/api/getTags" />,
+    <Torbjorn api="/api/getTags" />,
     document.getElementById('react-content')
 );

@@ -1,102 +1,42 @@
+<!-- index.html -->
+<!DOCTYPE html>
 <html>
+
 <head>
-    <!-- Some meta defintions -->
-    <meta charset="UTF-8">
+    <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width = device-width, initial-scape = 1">
 
-    <!-- Import jquery.highlight-->
-    <link rel="stylesheet" href="static/plugin/jquery.highlight/jquery.highlight-within-textarea.css" rel="stylesheet">
+    <title>Torbjörn - An HTML Tag Viewer</title>
 
     <!-- Import bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
-    <!-- Import our stylesheet -->
-    <link rel="stylesheet" href="static/style/index.css">
+    <!-- import jquery.highlight -->
+    <link rel="stylesheet" href="/static/plugin/jquery.highlight/jquery.highlight-within-textarea.css" rel="stylesheet">
 
-    <title>Torbjörn - An HTML Tag Viewer</title>
+    <!-- Bring in our style sheet -->
+    <link rel="stylesheet" href="/static/style/index.css">
 </head>
 
 <body>
-<div class="container">
+    <div id="react-content"></div>
 
-    <!-- Display our fancy title banner. -->
-    <div class="row">
-        <div class="jumbotron">
-            <a href="readme/"><h1>Torbjörn<BR></h1></a>
-            <p><small><i>"Build 'em up, Break 'em down!"</i></small></p>
-            <p>Displays a summary of the HTML tags at a url.</p>
-            <p>
-            <form method="post" name="url_submit" class="submit-once" onsubmit="$('#btn-url').prop('disabled',true);">
-            <div class="input-group input-group-lg">
-                <input type="text" class="form-control" name="user_url" id="usr-url" placeholder="Enter a url..."">
-                <span class="input-group-btn"><button class="btn btn-default" id="btn-url" type="submit">View tags!</button></span>
-            </div>
-            </form>
-            </p>
-        </div>
-    </div>
+    <!-- Import jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
-    <!-- Display an alert if need be. -->
-    {% if alert_str %}
-    <div class="row" >
-        <div class="col-sm-12">
-            <div class="alert {{ alert_style }}" role="alert">
-                <div style="text-align:center;font-weight:bold;"><h3>{{ alert_str }}</h3></div>
-            </div>
-        </div>
-    </div>
-    {% endif %}
+    <!-- Import bootstrap -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-    <!-- Display our parsed content, if we got it. -->
-    {% if html_doc %}
-    <div class="row top-buffer">
-        <!-- If we found tags, then display a list of our tags and the tally for each of them. -->
-        {% if html_tags %}
-        <div class="col-sm-3 sidebar">
-            <div class="well well-lg">
-                <div class="scrollable-menu">
-                    <div class="list-group">
-                        {% for tag in html_tags %}
-                        <!-- use our jquery.highlight plugin to highlight the text that we want to highlight in our textarea -->
-                        <a href="javascript:function onInput(input) {return {{ tag.highlights }};}$(document.getElementById('html-doc')).highlightWithinTextarea(onInput);" class="list-group-item">
-                            <span class="badge">{{tag.count}}</span>
-                            {{tag.name}}
-                        </a>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-9 content">  <!-- If tags are shown, then source code is displayed on the right -->
-        <!-- Otherwise let's just show the source code and nothing else -->
-        {% else %}
-        <div class="col-sm-12 content"> <!-- If we have no tags, then display all of the sourcecode -->
-        {% endif %}
-            <!-- Display our source code! -->
-            <div class="well well-lg">
-                <textarea disabled id="html-doc">{{ html_doc }}</textarea>
-            </div>
-        </div>
-    </div>
-    {% endif %}
-</div>
+    <!-- Import react -->
+    <script src="https://unpkg.com/react@15.3.1/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom@15.3.1/dist/react-dom.js"></script>
+    <script src="https://unpkg.com/babel-core@5.8.38/browser.min.js"></script>
 
-<!-- import jquery -->
-<script src="static/js/jquery-3.1.0.min.js"></script>
+    <!-- import jquery.highlight -->
+    <script src="/static/plugin/jquery.highlight/jquery.highlight-within-textarea.js"></script>
 
-<!-- import jquery.highlight -->
-<script src="static/plugin/jquery.highlight/jquery.highlight-within-textarea.js"></script>
-
-<!-- import bootstrap -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-<!-- import get url param -->
-<script src="static/js/get-url-param.js"></script>
-
-<!-- Simple script to pre-populate the textfield with the url param -->
-<script>
-$( "#usr-url" ).val(getUrlParameter('url'));
-</script>
+    <!-- And alas, bring in out script -->
+    <script type="text/babel" src="/static/scripts/react.js"></script>
 </body>
 </html>
