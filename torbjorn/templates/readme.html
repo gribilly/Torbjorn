@@ -23,11 +23,9 @@
         <li>A summary of the document is displayed, listing which tags are present in the HTML and how many of each tag</li>
         <li>Clicking on the name of each tag in the summary will highlight the tags in the source code view</li>
     </ul>
-    <BR>
+    <p>My solution follows the MVC design pattern.  Flask powers the Controller, while React powers the View.  Since there is no storage required in this solution, the model is pretty simple and just a Python class that's passed around as a .json.  This document aims to explain how all of these things come together.</p>
     <h4>Why call it Torbjörn?</h4>
     <p>If you're going to build a web-app, why not do it with a <a href="http://www.imdb.com/title/tt0088763/quotes?item=qt0416285">sense of style</a>?  Torbjörn is the name of a character from the game <a href="https://playoverwatch.com/en-us/heroes/torbjorn/">Overwatch</a>.  He's an engineer who's catch-phrase is <i>"Build 'em up, Break 'em down!"</i>.  Since this project is all about writing code to break-down a web-page into a list of elements, I thought the name was fitting.</p>
-
-    <BR>
     <h4>Some Sample URLs</h4>
     <ul>
         <li><a href="/?url=https%3A%2F%2Ftorbjorn.herokuapp.com%2Ftests%2Ftest">https://torbjorn.herokuapp.com/tests/test</a></li>
@@ -36,12 +34,16 @@
         <li><a href="/?url=bad_url">Bad URL</a></li>
     </ul>
 
-    <div class="page-header"><h2>Dependencies</h2></div>
+        <div class="page-header"><h2>Dependencies</h2></div>
         <p>This app is written in Python and relies on the following technologies to function:</p>
         <div class="list-group">
             <a href="http://flask.pocoo.org/" class="list-group-item">
                 <h4 class="list-group-item-heading">Flask</h4>
-                <p class="list-group-item-text">Python web-app framework.</p>
+                <p class="list-group-item-text">Python web-app framework.  Powers our controller.</p>
+            </a>
+            <a href="https://facebook.github.io/react/index.html" class="list-group-item">
+                <h4 class="list-group-item-heading">React</h4>
+                <p class="list-group-item-text">Facebook's JavaScript library for UI rendering.  Powers our view.</p>
             </a>
             <a href="https://www.crummy.com/software/BeautifulSoup/" class="list-group-item">
                 <h4 class="list-group-item-heading">Beautiful Soup</h4>
@@ -61,9 +63,9 @@
             </a>
         </div>
 
-    <div class="page-header"><h2>How it Works</h2></div>
+        <div class="page-header"><h2>How it Works (The Controller)</h2></div>
     <p>
-        The bulk of our logic starts in the <b>torbjorn</b> Python package.  Within this, are two classes: <b>TagParser</b> and <b>Tag</b>.  When our web-app receives a url from the user, we pass it to the TagParser object.  The TagParser object will open the url via Python's urllib and pass it to <b>BeautifulSoup</b>.
+        The bulk of our logic starts in the <b>torbjorn</b> Python package.  Within this, are two classes: <b>TagParser</b> and <b>Tag</b>.  When our controller receives a request with a url, we pass it to the TagParser object.  The TagParser object will open the url via Python's urllib and pass it to <b>BeautifulSoup</b>.
     </p>
 
     <div class="alert alert-danger"><p>BeautifulSoup is a python library designed to parse tags out of an html document and provide functionality to interact with said tags.</p><p>My code
@@ -87,17 +89,65 @@
     </p>
 
     <p>
-        After having created a Tag object, our TagParser will add the object to its tags dictionary.  This dictionary maps a tag name to a list of Tag objects that correspond to that name.  Our
-        TagParser will repeat this process until its reaches the end of the html document.
+        After having created a Tag object, our TagParser will add the object to its tags dictionary.  This dictionary maps a tag name to a list of Tag objects that correspond to that name.  Our TagParser will repeat this process until its reaches the end of the html document.  This information is then all passed to our view which renders the UI.
     </p>
+
+    <div class="page-header"><h2>Rendering the UI (The View)</h2></div>
+    <p>Let's start with how the view works.  The view is powered by React and broken down into several different components.  This allows for easy modularization of the UI and simpiler rendering.  The components are shown in the image below and listed below.</p>
+    <BR>
+    <img src="/static/src/react.png" class="img-responsive center-block" width="500px" />
+    <BR>
+    <div class="list-group">
+        <div class="list-group-item">
+            <h4 class="list-group-item-heading">UrlForm</h4>
+            <p class="list-group-item-text">The UrlForm is where our user inputs the url they want to view tags for.  Upon clicking submit a request will be sent to the server, which will return a response that React will use to render the UI.</p>
+        </div>
+        <div class="list-group-item">
+            <h4 class="list-group-item-heading">Alert</h4>
+            <p class="list-group-item-text">The Alert is used to render information about what all was parsed, it's also used to display error messagining in the event that there was something wrong with parsing the user's url.</p>
+        </div>
+        <div class="list-group-item">
+            <h4 class="list-group-item-heading">TagViewer</h4>
+            <p class="list-group-item-text">The TagViewer is rendered if were were able to get tags and/or html code out of the provided URL  It's composed of the TagList and HtmlViewer.</p>
+        </div>
+        <div class="list-group-item">
+            <h4 class="list-group-item-heading">HtmlViewer</h4>
+            <p class="list-group-item-text">Displays the HTML code that was parsed out of the URL  Has highlight properties to highlight areas of text within its textarea.</p>
+        </div>
+        <div class="list-group-item">
+            <h4 class="list-group-item-heading">TagList</h4>
+            <p class="list-group-item-text">Renders a list of tags that were found in our URL.  The list is composed of TagListItem components.  This component only renders if tags were actually found.</p>
+        </div>
+        <div class="list-group-item">
+            <h4 class="list-group-item-heading">TagListItem</h4>
+            <p class="list-group-item-text">Renders the name of a tag found in our code a long with a count of how many times it was encountered.  This also contains information about where to highlight this tag in the HtmlViewer.  When this component is tapped, we send its highlight list to the HtmlViewer via the TagViewer</p>
+        </div>
+    </div>
+
+    <h4>Using React's State</h4>
+    <p>In React, there is this concept of 'states'.  Whenever the state changes, the necessary UI components re-render themselves.  In our design, the Torbjorn component (which is composed of all of the elements above) has a state that consist of the items listed below.  Whenever the state changes, we set the properties of the appropriate component related to that state - thus updating our UI accordingly.</p>
+    <div class="list-group">
+     <div class="list-group-item">
+        <h4 class="list-group-item-heading">Url</h4>
+        <p class="list-group-item-text">The Url the user inputted and that was passed ot our server.  This is rendered in the URL form.</p>
+     </div>
+     <div class="list-group-item">
+        <h4 class="list-group-item-heading">Html</h4>
+        <p class="list-group-item-text">The html code that our server parsed out of the provided url.  This is passed to the TagViewer, which in turn uses it to render the HtmlViewer.</p>
+     </div>
+     <div class="list-group-item">
+        <h4 class="list-group-item-heading">Tags</h4>
+        <p class="list-group-item-text">A list of dictionaries, each of which contain information about a tag's name, count, and highlights.  Essentially, this is our Tag model in our python code in a format that's easy to work with in java-script.  This list is passed to the TagViewer, which in turn uses that information to render the TagList.</p>
+     </div>
+     <div class="list-group-item">
+        <h4 class="list-group-item-heading">Alert</h4>
+        <p class="list-group-item-text">Dictionary that contains a message and styling information for our Alert component.  As you probably guessed, this is passed to the Alert UI component and used to render it.</p>
+     </div>
+    </div>
 
     <BR>
     <h4>Highlighting the Tags</h4>
-    <p>
-        The highlighting in our rendered template is done via a jQuery plugin.  This plugin supports either highlighting all occurrences of a string in a textarea, or
-        highlighting a set of indices.  Since our TagParser kept track of the start and end indices of a tag, we simply pass each tag's list of indices to the html template.  That being said, that
-        doesn't solve the issue of how we highlight a specific subset when a tag is pressed.  To solve that, each tag is rendered in the document as a link that executes a javascript call that
-        highlights that tag's list of indices:
+    <p>The highlighting is handled inside of our HtmlViewer which uses a jQuery plugin for the highlights.  This plugin supports either highlighting all occurrences of a string in a textarea, or highlighting a set of indices.  Since our Tag data has the start and end indices of each occurence of the tag, we simply execute a javascript call that highlights that tag's list of indices:
     </p>
     <div class=""well><pre><code>function onInput(input) {return tag_idxs;}<BR>$(document.getElementById('html-doc')).highlightWithinTextarea(onInput);"</code></pre></div>
 
