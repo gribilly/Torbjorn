@@ -233,5 +233,5 @@ var Torbjorn= React.createClass({
 
 ReactDOM.render(
     <Torbjorn url="/api/getTags" />,
-    document.getElementById('content')
+    document.getElementById('react-content')
 );
