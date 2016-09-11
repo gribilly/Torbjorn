@@ -13,7 +13,9 @@ var HtmlViewer = React.createClass({
 
     render: function () {
         return (
-            <textarea disabled id="html-doc" value={this.props.html} />
+            <div className="well well-lg">
+                <textarea disabled id="html-doc" value={this.props.html} />
+            </div>
         );
     }
 });
@@ -72,16 +74,29 @@ var TagViewer = React.createClass({
     },
 
     render: function () {
-        return (
-            <div className="row top-buffer">
+
+        // Only display our list of tags if we actually have some tags to display.
+        var tagList;
+        if (this.props.tags.length > 0) {
+            tagList =
                 <div className="col-sm-3 sidebar">
                     <TagList tags={this.props.tags} handleClickTag={this.handleClickTag} />
-                </div>
-                <div className="col-sm-9 content">
-                    <div className="well well-lg">
-                        <HtmlViewer html={this.props.html} highlights={this.state.highlights} />
-                    </div>
-                </div>
+                </div>;
+        }
+
+        // We only display our HtmlViewer if we have code to display.  In addition, we adjust its sizing depending on if we're also showing our tags or not.
+        var htmlViewer;
+        if (this.props.html) {
+            htmlViewer =
+                <div className={((this.props.tags.length > 0) ? "col-sm-9" : "col-sm-12") + " content"}>
+                    <HtmlViewer html={this.props.html} highlights={this.state.highlights} />
+                </div>;
+        }
+
+        return (
+            <div className="row top-buffer">
+                {tagList}
+                {htmlViewer}
             </div>
         );
     }
@@ -168,6 +183,7 @@ var UrlForm = React.createClass({
         )
     }
 });
+
 
 var Torbjorn= React.createClass({
 
