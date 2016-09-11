@@ -5,5 +5,5 @@ from config import basedir
 app = Flask(__name__)
 app.config.from_object('config')
 
-# has to be after so that we don't get a conflict with the app.
+# Technically a circular import, but according to Flask docs this is ok and desired: http://flask.pocoo.org/docs/0.11/patterns/packages/
 from torbjorn import views
