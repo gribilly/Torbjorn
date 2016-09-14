@@ -162,7 +162,7 @@ var UrlForm = React.createClass({
             <div className="row">
                 <div className="jumbotron">
                     <a href="readme/">
-                        <h1>Torbjörn</h1>
+                        <h1>Torbjörn (React Version)</h1>
                     </a>
                     <p>
                         <small><i>"Build 'em up, Break 'em down!"</i></small>
